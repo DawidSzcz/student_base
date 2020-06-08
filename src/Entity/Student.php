@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StudentRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Student
 {
+    use Timestamps;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -19,7 +22,7 @@ class Student
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nr_albumu;
+    private $album_no;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -41,21 +44,14 @@ class Student
      */
     private $semester;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $card_uid;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNrAlbumu(): ?string
-    {
-        return $this->nr_albumu;
-    }
-
-    public function setNrAlbumu(string $nr_albumu): self
-    {
-        $this->nr_albumu = $nr_albumu;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -102,6 +98,30 @@ class Student
     public function setSemester(int $semester): self
     {
         $this->semester = $semester;
+
+        return $this;
+    }
+
+    public function getAlbumNo(): ?string
+    {
+        return $this->album_no;
+    }
+
+    public function setAlbumNo(string $album_no): self
+    {
+        $this->album_no = $album_no;
+
+        return $this;
+    }
+
+    public function getCardUid(): ?string
+    {
+        return $this->card_uid;
+    }
+
+    public function setCardUid(string $card_uid): self
+    {
+        $this->card_uid = $card_uid;
 
         return $this;
     }

@@ -12,10 +12,11 @@ class StudentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nr_albumu')
+            ->add('album_no')
             ->add('name')
             ->add('surname')
             ->add('start_year')
+            ->add('card_uid')
             ->add('semester')
         ;
     }

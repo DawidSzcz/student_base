@@ -1,94 +1,42 @@
 <?php
 
+
 namespace App\Controller;
 
-use App\Entity\Student;
-use App\Form\StudentType;
-use App\Repository\StudentRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/student")
- */
-class StudentController extends AbstractController
+use App\Entity\Student;
+use App\Repository\StudentRepository;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Symfony\Component\Routing\Annotation\Route;
+use FOS\RestBundle\Controller\Annotations as Rest;
+
+
+class StudentController extends AbstractFOSRestController
 {
     /**
-     * @Route("/", name="student_index", methods={"GET"})
+     * @var StudentRepository
      */
-    public function index(StudentRepository $studentRepository): Response
+    private $studentRepository;
+
+    public function __construct(StudentRepository $studentRepository)
     {
-        return $this->render('student/index.html.twig', [
-            'students' => $studentRepository->findAll(),
-        ]);
+        $this->studentRepository = $studentRepository;
+    }
+
+    public function getStudentsAction()
+    {
+        $view = $this->view($this->studentRepository->findAll(), 200);
+
+        return $this->handleView($view);
     }
 
     /**
-     * @Route("/new", name="student_new", methods={"GET","POST"})
+     * @Route("/api/students/{card_uid}")
      */
-    public function new(Request $request): Response
+    public function getStudentAction(Student $student)
     {
-        $student = new Student();
-        $form = $this->createForm(StudentType::class, $student);
-        $form->handleRequest($request);
+        $view = $this->view($student,  200);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($student);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('student_index');
-        }
-
-        return $this->render('student/new.html.twig', [
-            'student' => $student,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="student_show", methods={"GET"})
-     */
-    public function show(Student $student): Response
-    {
-        return $this->render('student/show.html.twig', [
-            'student' => $student,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="student_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Student $student): Response
-    {
-        $form = $this->createForm(StudentType::class, $student);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('student_index');
-        }
-
-        return $this->render('student/edit.html.twig', [
-            'student' => $student,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="student_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Student $student): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($student);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('student_index');
+        return $this->handleView($view);
     }
 }

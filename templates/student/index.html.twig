@@ -9,11 +9,12 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Nr_albumu</th>
+                <th>Album number</th>
                 <th>Name</th>
                 <th>Surname</th>
                 <th>Start_year</th>
                 <th>Semester</th>
+                <th>Card Uid</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -21,10 +22,11 @@
         {% for student in students %}
             <tr>
                 <td>{{ student.id }}</td>
-                <td>{{ student.nrAlbumu }}</td>
+                <td>{{ student.albumNo }}</td>
                 <td>{{ student.name }}</td>
                 <td>{{ student.surname }}</td>
                 <td>{{ student.startYear }}</td>
+                <td>{{ student.cardUid }}</td>
                 <td>{{ student.semester }}</td>
                 <td>
                     <a href="{{ path('student_show', {'id': student.id}) }}">show</a>
@@ -40,4 +42,8 @@
     </table>
 
     <a href="{{ path('student_new') }}">Create new</a>
+    <form action="{{ path('student_upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="uploadedfile">
+        <input type="submit" value="Upload File"/>
+    </form>
 {% endblock %}
