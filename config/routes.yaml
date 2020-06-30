@@ -13,3 +13,7 @@ students:
 gesdinet_jwt_refresh_token:
   path: /api/token/refresh
   controller: gesdinet.jwtrefreshtoken::refresh
+
+main:
+  path: /
+  controller : App\Controller\AdminController::index
