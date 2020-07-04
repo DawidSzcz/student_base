@@ -13,8 +13,6 @@ fos_rest:
     view_response_listener: 'force'
     formats:
       json: true
-  exception:
-    enabled: true
 #  routing_loader:
 #    default_format: json
 #    include_format: false

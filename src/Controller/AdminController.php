@@ -5,16 +5,26 @@ namespace App\Controller;
 use App\Entity\Student;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
 /**
  * @Route("/admin")
  */
 class AdminController extends AbstractController
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     /**
      * @Route("/", name="student_index", methods={"GET"})
      */
@@ -27,11 +37,28 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/uploadStudents", name="student_upload", methods={"POST"})
+     * @Rest\FileParam(name="uploadedfile", nullable=false)
      */
-    public function uploadStudents()
+    public function uploadStudents(ParamFetcher $paramFetcher)
     {
-        phpinfo();
-        die;
+        /** @var UploadedFile $file */
+        $file = $paramFetcher->get('uploadedfile');
+        $file_content = json_decode(file_get_contents($file->getPathname()));
+
+        foreach($file_content as $student_raw) {
+            $student = new Student();
+            $student->setAlbumNo($student_raw->album_no);
+            $student->setName($student_raw->name);
+            $student->setSurname($student_raw->surname);
+            $student->setStartYear($student_raw->start_year);
+            $student->setSemester($student_raw->semester);
+            $student->setCardUid($student_raw->card_uid);
+
+            $this->entityManager->persist($student);
+        }
+
+        $this->entityManager->flush();
+        return $this->redirectToRoute('student_index');
     }
 
     /**
