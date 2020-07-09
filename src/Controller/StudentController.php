@@ -23,6 +23,9 @@ class StudentController extends AbstractFOSRestController
         $this->studentRepository = $studentRepository;
     }
 
+    /**
+     * @Route("/students")
+     */
     public function getStudentsAction()
     {
         $view = $this->view($this->studentRepository->findAll(), 200);
@@ -31,7 +34,7 @@ class StudentController extends AbstractFOSRestController
     }
 
     /**
-     * @Route("/api/students/{card_uid}")
+     * @Route("/students/{card_uid}")
      */
     public function getStudentAction(Student $student)
     {

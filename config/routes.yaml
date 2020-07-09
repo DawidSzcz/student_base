@@ -6,7 +6,6 @@ api_login_check:
   path: api/login_check
 
 students:
-  type : rest
   resource : App\Controller\StudentController
   prefix : api
 
