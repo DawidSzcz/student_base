@@ -15,6 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Student
 {
+    const UID_HASH_ALGO = 'sha256';
     use Timestamps;
 
     /**
@@ -63,7 +64,7 @@ class Student
     /**
      * @Constraints\NotBlank()
      *
-     * @ORM\Column(type="string", length=50, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $card_uid;
 

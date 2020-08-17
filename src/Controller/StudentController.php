@@ -3,16 +3,14 @@
 
 namespace App\Controller;
 
-
-use App\Entity\Student;
 use App\Repository\StudentRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Routing\Annotation\Route;
-use FOS\RestBundle\Controller\Annotations as Rest;
 
 
 class StudentController extends AbstractFOSRestController
 {
+
     /**
      * @var StudentRepository
      */
@@ -24,21 +22,31 @@ class StudentController extends AbstractFOSRestController
     }
 
     /**
-     * @Route("/students")
+     * @Route("/students/card_uid/{card_uids}")
      */
-    public function getStudentsAction()
+    public function getStudentsByCardUidAction(string $card_uids)
     {
-        $view = $this->view($this->studentRepository->findAll(), 200);
+        $view = $this->view($this->studentRepository->findBy(['album_no' => explode(',', $card_uids)]), 200);
 
         return $this->handleView($view);
     }
 
     /**
-     * @Route("/students/{card_uid}")
+     * @Route("/students/album_no/{album_nos}")
      */
-    public function getStudentAction(Student $student)
+    public function getStudentStudentsByAlbumNoAction(string $album_nos)
     {
-        $view = $this->view($student,  200);
+        $view = $this->view($this->studentRepository->findBy(['album_no' => explode(',', $album_nos)]), 200);
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * @Route("/students")
+     */
+    public function getStudentsAction()
+    {
+        $view = $this->view($this->studentRepository->findAll(), 200);
 
         return $this->handleView($view);
     }

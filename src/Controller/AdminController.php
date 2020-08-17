@@ -56,7 +56,7 @@ class AdminController extends AbstractController
             $student->setSurname($student_raw->surname);
             $student->setStartYear($student_raw->start_year);
             $student->setSemester($student_raw->semester);
-            $student->setCardUid($student_raw->card_uid);
+            $student->setCardUid(hash(Student::UID_HASH_ALGO, $student_raw->card_uid));
             $student->setUserId($user_id);
 
             $this->entityManager->persist($student);
@@ -86,6 +86,7 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($student);
             $student->setUserId($this->getUser()->getId());
+            $student->setCardUid(hash(Student::UID_HASH_ALGO, $student->getCardUid()));
             $entityManager->flush();
 
             $this->addFlash('success', 'Student created successfully');

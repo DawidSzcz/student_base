@@ -12,7 +12,6 @@
             <th>Surname</th>
             <th>Start_year</th>
             <th>Semester</th>
-            <th>Card Uid</th>
             <th>actions</th>
         </tr>
         </thead>
@@ -25,7 +24,6 @@
                 <td>{{ student.surname }}</td>
                 <td>{{ student.startYear }}</td>
                 <td>{{ student.semester }}</td>
-                <td>{{ student.cardUid }}</td>
                 <td>
                     <a class="btn btn-primary" role="button" href="{{ path('student_show', {'id': student.id}) }}">show</a>
                     <a class="btn btn-secondary" role="button" href="{{ path('student_edit', {'id': student.id}) }}">edit</a>
