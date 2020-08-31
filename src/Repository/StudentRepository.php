@@ -19,22 +19,21 @@ class StudentRepository extends ServiceEntityRepository
         parent::__construct($registry, Student::class);
     }
 
-    // /**
-    //  * @return Student[] Returns an array of Student objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findPublicColumnsByAlbumNo($user_id, $conditions = [])
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+        $query = $this->createQueryBuilder('stud')
+            ->select(['stud.name', 'stud.surname', 'stud.start_year', 'stud.semester', 'stud.album_no'])
+            ->where('stud.user_id = :user_id')
+            ->setParameter(':user_id', $user_id);
+
+        foreach ($conditions as $param => $values) {
+            $query->andWhere($query->expr()->in(sprintf('stud.%s', $param), sprintf(':%s', $param)))
+                ->setParameter(':%s', $values);
+        }
+        return $query->orderBy('stud.id', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Student

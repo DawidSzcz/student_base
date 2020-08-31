@@ -26,7 +26,7 @@ class StudentController extends AbstractFOSRestController
      */
     public function getStudentsByCardUidAction(string $card_uids)
     {
-        $view = $this->view($this->studentRepository->findBy(['album_no' => explode(',', $card_uids)]), 200);
+        $view = $this->view($this->studentRepository->findPublicColumnsByAlbumNo($this->getUser()->getId(), ['card_uid' => explode(',', $card_uids)]), 200);
 
         return $this->handleView($view);
     }
@@ -36,7 +36,7 @@ class StudentController extends AbstractFOSRestController
      */
     public function getStudentStudentsByAlbumNoAction(string $album_nos)
     {
-        $view = $this->view($this->studentRepository->findBy(['album_no' => explode(',', $album_nos)]), 200);
+        $view = $this->view($this->studentRepository->findPublicColumnsByAlbumNo($this->getUser()->getId(), ['album_no' => explode(',', $album_nos)]), 200);
 
         return $this->handleView($view);
     }
@@ -46,7 +46,7 @@ class StudentController extends AbstractFOSRestController
      */
     public function getStudentsAction()
     {
-        $view = $this->view($this->studentRepository->findAll(), 200);
+        $view = $this->view($this->studentRepository->findPublicColumnsByAlbumNo($this->getUser()->getId()), 200);
 
         return $this->handleView($view);
     }
