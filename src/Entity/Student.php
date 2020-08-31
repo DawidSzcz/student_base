@@ -15,7 +15,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Student
 {
-    const UID_HASH_ALGO = 'sha256';
     use Timestamps;
 
     /**
