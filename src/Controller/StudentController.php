@@ -26,7 +26,21 @@ class StudentController extends AbstractFOSRestController
      */
     public function getStudentsByCardUidAction(string $card_uids)
     {
-        $view = $this->view($this->studentRepository->findPublicColumnsByAlbumNo($this->getUser()->getId(), ['card_uid' => explode(',', $card_uids)]), 200);
+        $card_uids = explode(',',base64_decode($card_uids));
+        $result = array_fill_keys($card_uids, []);
+
+        $students = $this->studentRepository->findPublicColumnsBy(
+            $this->getUser()->getId(),
+            true,
+            ['card_uid' => $card_uids]
+        );
+
+        foreach($students as $student) {
+            $card_uid = $student['card_uid'];
+            unset($student['card_uid']);
+            $result[$card_uid] = $student;
+        }
+        $view = $this->view($result, 200);
 
         return $this->handleView($view);
     }
@@ -36,7 +50,19 @@ class StudentController extends AbstractFOSRestController
      */
     public function getStudentStudentsByAlbumNoAction(string $album_nos)
     {
-        $view = $this->view($this->studentRepository->findPublicColumnsByAlbumNo($this->getUser()->getId(), ['album_no' => explode(',', $album_nos)]), 200);
+        $album_nos = explode(',',base64_decode($album_nos));
+        $result = array_fill_keys($album_nos, []);
+
+        $students = $this->studentRepository->findPublicColumnsBy(
+            $this->getUser()->getId(),
+            ['album_no' => $album_nos]
+        );
+
+        foreach($students as $student) {
+            $result[$student['album_no']] = $student;
+        }
+
+        $view = $this->view($result, 200);
 
         return $this->handleView($view);
     }
@@ -46,7 +72,14 @@ class StudentController extends AbstractFOSRestController
      */
     public function getStudentsAction()
     {
-        $view = $this->view($this->studentRepository->findPublicColumnsByAlbumNo($this->getUser()->getId()), 200);
+        $result = [];
+        $students = $this->studentRepository->findPublicColumnsBy($this->getUser()->getId());
+
+        foreach($students as $student) {
+            $result[$student['album_no']] = $student;
+        }
+
+        $view = $this->view($result, 200);
 
         return $this->handleView($view);
     }

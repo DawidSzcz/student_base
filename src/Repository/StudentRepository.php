@@ -19,16 +19,23 @@ class StudentRepository extends ServiceEntityRepository
         parent::__construct($registry, Student::class);
     }
 
-    public function findPublicColumnsByAlbumNo($user_id, $conditions = [])
+    public function findPublicColumnsBy($user_id, $conditions = [], $retrieve_card_uid = false)
     {
+        $public_columns = ['stud.name' , 'stud.surname', 'stud.start_year', 'stud.semester', 'stud.album_no'];
+
+        if($retrieve_card_uid) {
+            $public_columns[] =  'stud.card_uid';
+        }
+
         $query = $this->createQueryBuilder('stud')
-            ->select(['stud.name', 'stud.surname', 'stud.start_year', 'stud.semester', 'stud.album_no'])
+            ->select($public_columns)
             ->where('stud.user_id = :user_id')
             ->setParameter(':user_id', $user_id);
 
         foreach ($conditions as $param => $values) {
-            $query->andWhere($query->expr()->in(sprintf('stud.%s', $param), sprintf(':%s', $param)))
-                ->setParameter(':%s', $values);
+            $bind_param = sprintf(':%s', $param);
+            $query->andWhere($query->expr()->in(sprintf('stud.%s', $param), sprintf($bind_param)))
+                ->setParameter($bind_param, $values);
         }
         return $query->orderBy('stud.id', 'ASC')
             ->getQuery()
