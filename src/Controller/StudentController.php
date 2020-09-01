@@ -31,8 +31,8 @@ class StudentController extends AbstractFOSRestController
 
         $students = $this->studentRepository->findPublicColumnsBy(
             $this->getUser()->getId(),
-            true,
-            ['card_uid' => $card_uids]
+            ['card_uid' => $card_uids],
+            true
         );
 
         foreach($students as $student) {
