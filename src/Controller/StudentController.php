@@ -68,6 +68,28 @@ class StudentController extends AbstractFOSRestController
     }
 
     /**
+     * @Route("/students/id/{ids}")
+     */
+    public function getStudentStudentsByIdAction(string $ids)
+    {
+        $ids = explode(',',base64_decode($ids));
+        $result = array_fill_keys($ids, []);
+
+        $students = $this->studentRepository->findPublicColumnsBy(
+            $this->getUser()->getId(),
+            ['id' => $ids]
+        );
+
+        foreach($students as $student) {
+            $result[$student['id']] = $student;
+        }
+
+        $view = $this->view($result, 200);
+
+        return $this->handleView($view);
+    }
+
+    /**
      * @Route("/students")
      */
     public function getStudentsAction()
