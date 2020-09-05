@@ -21,7 +21,7 @@ class StudentRepository extends ServiceEntityRepository
 
     public function findPublicColumnsBy($user_id, $conditions = [], $retrieve_card_uid = false)
     {
-        $public_columns = ['stud.name' , 'stud.surname', 'stud.start_year', 'stud.semester', 'stud.album_no'];
+        $public_columns = ['stud.id', 'stud.name' , 'stud.surname', 'stud.start_year', 'stud.semester', 'stud.album_no'];
 
         if($retrieve_card_uid) {
             $public_columns[] =  'stud.card_uid';
