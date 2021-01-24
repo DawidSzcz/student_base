@@ -12,7 +12,6 @@ Lista parametrów powinna byćzakodowana base64. Wymagana autoryzacja Basic Auth
 Dodatkowo można się zalogować do tej aplikacji, dodać nowych studenów (można wrzucić dane zbiorczo w pliku jako json) edytować/usunąć istniejących.
 
 Dostęp do aplikacji: http://student-base-lb-1340981123.eu-central-1.elb.amazonaws.com/login
-logowanie: adm@adm.com/123456
 
 Format pliku:
 
